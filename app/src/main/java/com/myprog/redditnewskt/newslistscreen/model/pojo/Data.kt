@@ -5,7 +5,7 @@ import com.fasterxml.jackson.annotation.JsonProperty
 class Data {
 
     @JsonProperty("children")
-    var newsArray : List<NewsArray> = TODO()
+    var newsArray : List<NewsArray>? = null
 
 
 }

@@ -2,6 +2,8 @@ package com.myprog.redditnewskt.newslistscreen.model
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.myprog.redditnewskt.newslistscreen.contract.MainContract
+import com.myprog.redditnewskt.newslistscreen.model.pojo.Data
+import com.myprog.redditnewskt.newslistscreen.model.pojo.NewsArray
 import com.myprog.redditnewskt.newslistscreen.model.pojo.RedditTopNews
 import retrofit2.Call
 import retrofit2.Callback
@@ -25,6 +27,12 @@ class NewsListScreenModel : MainContract.Model {
     override fun loadNews() {
         val call = mIAPIReddit.getNews(numberOfNews).enqueue(object : Callback<RedditTopNews> {
             override fun onResponse(call: Call<RedditTopNews>, response: Response<RedditTopNews>) {
+                val redditTopNews : RedditTopNews? = response.body()
+                val topNewsFromReddit : Data = redditTopNews?.data ?: Data()
+                val newsArrayList = listOf(topNewsFromReddit.newsArray)
+                for (i in 0..newsArrayList.size) {
+
+                }
 
             }
 

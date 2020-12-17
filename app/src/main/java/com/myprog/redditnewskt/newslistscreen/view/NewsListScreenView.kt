@@ -74,7 +74,7 @@ class NewsListScreenView : Fragment(), MainContract.View {
         }
 
         override fun getItemCount(): Int {
-            return 100
+            return 50
         }
     }
 
