@@ -9,8 +9,11 @@ class NewsListScreenPresenter(view: MainContract.View) : MainContract.Presenter 
 
 
     var mView: MainContract.View = view
-    var mModel = NewsListScreenModel()
-    mModel.loadNews()
+    var mModel = NewsListScreenModel(this)
+
+    init {
+        mModel.loadNews()
+    }
 
     lateinit var timePublic: ArrayList<Int>
 

@@ -6,11 +6,25 @@ import com.fasterxml.jackson.annotation.JsonProperty
 
 class News() {
 
+    @JsonProperty("author")
+    lateinit var author: String
+    @JsonProperty("thumbnail")
+    lateinit var thumbnail: String
+    @JsonProperty("url")
+    lateinit var url: String
+    @JsonProperty("title")
+    lateinit var title: String
+    @JsonProperty("created_utc")
+    var created_utc: Int = 0
+    @JsonProperty("num_comments")
+    var num_comments: Int = 0
+
+
     @JsonIgnore
     val author_cakeday: String = ""
     @JsonIgnore
     val approved_at_utc: String = ""
-    @JsonProperty("subreddit")
+    @JsonIgnore
     val subreddit: String = ""
     @JsonIgnore
     val selftext: String = ""
@@ -24,8 +38,6 @@ class News() {
     val gilded: String = ""
     @JsonIgnore
     val clicked: Boolean = false
-    @JsonProperty("title")
-    val title: String = ""
     @JsonIgnore
     val link_flair_richtext: List<String> = TODO()
     @JsonIgnore
@@ -88,8 +100,6 @@ class News() {
     val approved_by: String = ""
     @JsonIgnore
     val author_premium: Boolean = false
-    @JsonProperty("thumbnail")
-    val thumbnail: String = ""
     @JsonIgnore
     val edited: Boolean = false
     @JsonIgnore
@@ -184,12 +194,8 @@ class News() {
     val is_robot_indexable: String = ""
     @JsonIgnore
     val report_reasons: String = ""
-    @JsonProperty("author")
-    val author: String = ""
     @JsonIgnore
     val discussion_type: String = ""
-    @JsonProperty("num_comments")
-    val num_comments: Int
     @JsonIgnore
     val send_replies: Boolean = false
     @JsonIgnore
@@ -208,12 +214,8 @@ class News() {
     val parent_whitelist_status: String = ""
     @JsonIgnore
     val stickied: Boolean = false
-    @JsonProperty("url")
-    val url: String = ""
     @JsonIgnore
     val subreddit_subscribers: String = ""
-    @JsonProperty("created_utc")
-    val created_utc: Int
     @JsonIgnore
     val num_crossposts: String = ""
     @JsonIgnore
