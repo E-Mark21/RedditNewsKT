@@ -5,17 +5,18 @@ import com.myprog.redditnewskt.newslistscreen.model.NewsListScreenModel
 import java.util.*
 import kotlin.collections.ArrayList
 
+lateinit var mModel: MainContract.Model
+lateinit var timePublic: ArrayList<Int>
+
 class NewsListScreenPresenter(view: MainContract.View) : MainContract.Presenter {
 
-
-    var mView: MainContract.View = view
-    var mModel = NewsListScreenModel(this)
+    private var mView = view
 
     init {
+        mModel = NewsListScreenModel(this)
         mModel.loadNews()
-    }
 
-    lateinit var timePublic: ArrayList<Int>
+    }
 
     override fun updateUI(
         author: ArrayList<String>,

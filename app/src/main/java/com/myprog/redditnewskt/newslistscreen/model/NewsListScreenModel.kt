@@ -21,6 +21,7 @@ class NewsListScreenModel(presenter : MainContract.Presenter) : MainContract.Mod
     lateinit var posted: ArrayList<Int>
     lateinit var num_comments: ArrayList<Int>
 
+
     var mPresenter = presenter
 
     private val mObjectMapper = ObjectMapper()
@@ -29,18 +30,19 @@ class NewsListScreenModel(presenter : MainContract.Presenter) : MainContract.Mod
             .addConverterFactory(JacksonConverterFactory
             .create(mObjectMapper))
             .build()
-    private val mIAPIReddit: IAPIReddit = mRetrofit.create(IAPIReddit::class.java)
+    private var mIAPIReddit: IAPIReddit = mRetrofit.create(IAPIReddit::class.java)
 
     override fun loadNews() {
-        mIAPIReddit.getNews(numberOfNews).enqueue(object : Callback<RedditTopNews> {
+        val call: Call<RedditTopNews> =  mIAPIReddit.getNews(numberOfNews)
+            call.enqueue(object : Callback<RedditTopNews> {
             override fun onResponse(call: Call<RedditTopNews>, response: Response<RedditTopNews>) {
-                var redditTopNews = response.body()
-                var topNewsFromReddit = redditTopNews?.data
+                val redditTopNews = response.body()
+                val topNewsFromReddit = redditTopNews?.data
                 val newsArrayList = topNewsFromReddit?.newsArray
                 if (newsArrayList != null) {
                     for (i in 0..newsArrayList.size) {
-                        var newsArray = newsArrayList[i]
-                        var news = newsArray.news
+                        val newsArray = newsArrayList[i]
+                        val news = newsArray.news
                         author.add(news.author)
                         thumbnail.add(news.thumbnail)
                         url.add(news.url)
@@ -48,14 +50,8 @@ class NewsListScreenModel(presenter : MainContract.Presenter) : MainContract.Mod
                         posted.add(news.created_utc)
                         num_comments.add(news.num_comments)
                     }
-                    mPresenter.updateUI(author,
-                    posted,
-                    num_comments,
-                    thumbnail,
-                    url,
-                    title)
+                    mPresenter.updateUI(author, posted, num_comments, thumbnail, url, title)
                 }
-
             }
 
             override fun onFailure(call: Call<RedditTopNews>, t: Throwable) {

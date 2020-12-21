@@ -13,13 +13,28 @@ import androidx.recyclerview.widget.RecyclerView
 import com.myprog.redditnewskt.R
 import com.myprog.redditnewskt.newslistscreen.contract.MainContract
 import com.myprog.redditnewskt.newslistscreen.presenter.NewsListScreenPresenter
+import com.squareup.picasso.Picasso
+import kotlin.math.atan
 
 class NewsListScreenView : Fragment(), MainContract.View {
 
 
     private lateinit var recyclerView: RecyclerView
-    private lateinit var mPresenter: NewsListScreenPresenter
+    private lateinit var mPresenter: MainContract.Presenter
     private var adapter: NewsAdapter? = null
+
+    //Test
+    var author: ArrayList<String> = arrayListOf("Автор", "Автор")
+    var timePublic: ArrayList<Int> = arrayListOf(2, 1)
+    var num_comments: ArrayList<Int> = arrayListOf(543, 631)
+    var thumbnail: ArrayList<String> = arrayListOf("https://lh3.googleusercontent.com/proxy/LDuFuVyPRPzM0YzB7LIpva1-47GsSvgEKGYRRi9UsoyIhUVmys5St9pnAvBzTwDaf7D-quZ4PXlJ3EhtcqhbUVjW4Ohr47lZbUn3QbJ405M873uYz4vJWy4sk_nOG52PWSEYTFhTYbmQf1YwZEI65wo", "https://i.pinimg.com/originals/ab/b6/a8/abb6a800ab2193fcedd9bda566b7402c.jpg")
+    var url: ArrayList<String> = arrayListOf("", "")
+    var title: ArrayList<String> = arrayListOf("Заголовок", "Заоловок")
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        mPresenter = NewsListScreenPresenter(this)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -29,9 +44,11 @@ class NewsListScreenView : Fragment(), MainContract.View {
         val view = inflater.inflate(R.layout.news_list_screen, container, false)
         recyclerView = view.findViewById(R.id.news_recycler) as RecyclerView
         recyclerView.layoutManager = LinearLayoutManager(context)
-        mPresenter = NewsListScreenPresenter(this)
+        adapter = NewsAdapter(author, timePublic, num_comments, thumbnail, url, title)
+        recyclerView.adapter = adapter
         return view
     }
+
     override fun updateAdapter(
         author: ArrayList<String>,
         timePublic: ArrayList<Int>,
@@ -40,9 +57,13 @@ class NewsListScreenView : Fragment(), MainContract.View {
         url: ArrayList<String>,
         title: ArrayList<String>
     ) {
-        adapter = NewsAdapter(author, timePublic, num_comments, thumbnail, url, title)
-        recyclerView.adapter= adapter
-
+        if (adapter == null) {
+            adapter = NewsAdapter(author, timePublic, num_comments, thumbnail, url, title)
+            recyclerView.adapter = adapter
+        } else {
+            adapter!!.updateItem(author, timePublic, num_comments, thumbnail, url, title)
+            adapter!!.notifyDataSetChanged()
+        }
     }
 
     companion object {
@@ -51,13 +72,15 @@ class NewsListScreenView : Fragment(), MainContract.View {
         }
     }
 
-    private inner class NewsAdapter(var author: ArrayList<String>,
-                                    var timePublic: ArrayList<Int>,
-                                    var num_comments: ArrayList<Int>,
-                                    var thumbnail: ArrayList<String>,
-                                    var url: ArrayList<String>,
-                                    var title: ArrayList<String>) :
-        RecyclerView.Adapter<ViewHolder>(), View.OnClickListener {
+    private inner class NewsAdapter(
+        var author: ArrayList<String>,
+        var timePublic: ArrayList<Int>,
+        var num_comments: ArrayList<Int>,
+        var thumbnail: ArrayList<String>,
+        var url: ArrayList<String>,
+        var title: ArrayList<String>
+    ) :
+        RecyclerView.Adapter<ViewHolder>() {
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
             val view = layoutInflater.inflate(R.layout.news_item, parent, false)
@@ -65,40 +88,62 @@ class NewsListScreenView : Fragment(), MainContract.View {
         }
 
         override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-            holder.bind()
+            holder.bind(author, timePublic, num_comments, url, title)
+
+            Picasso.with(holder.itemView.context).load(thumbnail[position])
+                .placeholder(R.drawable.placeholder).into(holder.thumbnailView)
         }
 
         override fun getItemCount(): Int {
             return author.size
         }
 
-        override fun onClick(p0: View?) {
-            Toast.makeText(context, "Pressed!", Toast.LENGTH_SHORT).show()
+        fun updateItem(
+            author: ArrayList<String>,
+            timePublic: ArrayList<Int>,
+            num_comments: ArrayList<Int>,
+            thumbnail: ArrayList<String>,
+            url: ArrayList<String>,
+            title: ArrayList<String>
+        ) {
+           this.author = author
+           this.timePublic = timePublic
+           this.num_comments = num_comments
+           this.thumbnail = thumbnail
+           this.url = url
+           this.title = title
+           notifyDataSetChanged()
         }
     }
 
-    private inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view), View.OnClickListener {
+    private inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view),
+        View.OnClickListener {
 
-        val author: TextView = itemView.findViewById(R.id.author)
-        val posted_by: TextView = itemView.findViewById(R.id.posted_by)
-        val num_comments: TextView = itemView.findViewById(R.id.num_comments)
-        val tile: TextView = itemView.findViewById(R.id.title)
-        val thumbnail: ImageView = itemView.findViewById(R.id.thumbnail)
+        var textAuthorView: TextView = itemView.findViewById(R.id.author)
+        var textPosted_byView: TextView = itemView.findViewById(R.id.posted_by)
+        var textNum_commentsView: TextView = itemView.findViewById(R.id.num_comments)
+        var textTitleView: TextView = itemView.findViewById(R.id.title)
+        var thumbnailView: ImageView = itemView.findViewById(R.id.thumbnail)
 
         init {
-            itemView.setOnClickListener (this)
+            itemView.setOnClickListener(this)
         }
 
-        fun bind() {
-
+        fun bind(
+            author: ArrayList<String>,
+            timePublic: ArrayList<Int>,
+            num_comments: ArrayList<Int>,
+            url: ArrayList<String>,
+            title: ArrayList<String>
+        ) {
+            textAuthorView.setText(author[position])
+            textPosted_byView.setText(timePublic[position].toString())
+            textNum_commentsView.setText(num_comments[position].toString())
+            textTitleView.setText(title[position])
         }
 
         override fun onClick(v: View) {
-
+            Toast.makeText(context, "Pressed!", Toast.LENGTH_SHORT).show()
         }
     }
-
-
-
-
 }
