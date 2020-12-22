@@ -1,5 +1,6 @@
 package com.myprog.redditnewskt.newslistscreen.view
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -11,6 +12,8 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.myprog.redditnewskt.R
+import com.myprog.redditnewskt.imageviewerscreen.EXTRA_URL
+import com.myprog.redditnewskt.imageviewerscreen.ImageViewerScreen
 import com.myprog.redditnewskt.newslistscreen.contract.MainContract
 import com.myprog.redditnewskt.newslistscreen.presenter.NewsListScreenPresenter
 import com.squareup.picasso.Picasso
@@ -44,8 +47,8 @@ class NewsListScreenView : Fragment(), MainContract.View {
         val view = inflater.inflate(R.layout.news_list_screen, container, false)
         recyclerView = view.findViewById(R.id.news_recycler) as RecyclerView
         recyclerView.layoutManager = LinearLayoutManager(context)
-        adapter = NewsAdapter(author, timePublic, num_comments, thumbnail, url, title)
-        recyclerView.adapter = adapter
+        adapter = NewsAdapter(author, timePublic, num_comments, thumbnail, url, title)          //Test
+        recyclerView.adapter = adapter                                                          //Test
         return view
     }
 
@@ -143,7 +146,9 @@ class NewsListScreenView : Fragment(), MainContract.View {
         }
 
         override fun onClick(v: View) {
-            Toast.makeText(context, "Pressed!", Toast.LENGTH_SHORT).show()
+            Intent(context, ImageViewerScreen::class.java).apply {
+                putExtra(EXTRA_URL, url[position])
+            }
         }
     }
 }

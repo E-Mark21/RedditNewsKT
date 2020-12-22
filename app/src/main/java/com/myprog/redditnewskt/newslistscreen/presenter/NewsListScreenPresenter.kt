@@ -15,7 +15,6 @@ class NewsListScreenPresenter(view: MainContract.View) : MainContract.Presenter 
     init {
         mModel = NewsListScreenModel(this)
         mModel.loadNews()
-
     }
 
     override fun updateUI(
