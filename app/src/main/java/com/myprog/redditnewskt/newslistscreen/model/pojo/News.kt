@@ -1,6 +1,5 @@
 package com.myprog.redditnewskt.newslistscreen.model.pojo
 
-import androidx.annotation.StringRes
 import com.fasterxml.jackson.annotation.JsonIgnore
 import com.fasterxml.jackson.annotation.JsonProperty
 
