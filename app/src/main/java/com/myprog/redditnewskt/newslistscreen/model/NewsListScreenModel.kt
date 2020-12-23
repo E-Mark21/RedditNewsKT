@@ -35,12 +35,11 @@ class NewsListScreenModel(presenter : MainContract.Presenter) : MainContract.Mod
     private var mIAPIReddit: IAPIReddit = mRetrofit.create(IAPIReddit::class.java)
 
     override fun loadNews() {
-        Log.d(TAG, "Started")
         val call: Call<RedditTopNews> =  mIAPIReddit.getNews(numberOfNews)
             call.enqueue(object : Callback<RedditTopNews> {
             override fun onResponse(call: Call<RedditTopNews>, response: Response<RedditTopNews>) {
                 val redditTopNews = response.body()
-                val topNewsFromReddit = redditTopNews?.data     //Data
+                val topNewsFromReddit = redditTopNews?.data
                 val newsArrayList = topNewsFromReddit?.newsArray
                 if (newsArrayList != null) {
                     for (i in 0..newsArrayList.size) {
@@ -53,14 +52,12 @@ class NewsListScreenModel(presenter : MainContract.Presenter) : MainContract.Mod
                         posted.add(news.created_utc)
                         num_comments.add(news.num_comments)
                     }
-                   // mPresenter.updateUI(author, posted, num_comments, thumbnail, url, title)
+                   mPresenter.updateUI(author, posted, num_comments, thumbnail, url, title)
                 }
             }
 
             override fun onFailure(call: Call<RedditTopNews>, t: Throwable) {
-
-                val s : String = t.toString()
-                val d = 5
+                Log.d(TAG, "$t")
             }
         })
     }

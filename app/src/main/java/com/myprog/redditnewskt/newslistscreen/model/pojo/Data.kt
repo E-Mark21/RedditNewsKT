@@ -14,6 +14,4 @@ class Data() {
     lateinit var after: String
     @JsonIgnore
     lateinit var before: String
-
-
 }

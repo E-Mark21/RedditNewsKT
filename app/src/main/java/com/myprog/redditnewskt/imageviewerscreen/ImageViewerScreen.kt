@@ -14,8 +14,10 @@ class ImageViewerScreen : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_image_viewer)
         mImageView = findViewById(R.id.url_image)
-        var url = intent.extras?.get(EXTRA_URL) as String
-        Picasso.with(applicationContext).load(url)
-            .placeholder(R.drawable.placeholder).into(mImageView)
+        if (intent.extras !== null) {
+            var url = intent.extras?.get(EXTRA_URL) as String
+            Picasso.with(applicationContext).load(url)
+                .placeholder(R.drawable.placeholder).into(mImageView)
+        }
     }
 }

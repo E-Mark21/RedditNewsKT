@@ -30,9 +30,12 @@ class NewsListScreenView : Fragment(), MainContract.View {
     var author: ArrayList<String> = arrayListOf("Автор", "Автор")
     var timePublic: ArrayList<Int> = arrayListOf(2, 1)
     var num_comments: ArrayList<Int> = arrayListOf(543, 631)
-    var thumbnail: ArrayList<String> = arrayListOf("https://lh3.googleusercontent.com/proxy/LDuFuVyPRPzM0YzB7LIpva1-47GsSvgEKGYRRi9UsoyIhUVmys5St9pnAvBzTwDaf7D-quZ4PXlJ3EhtcqhbUVjW4Ohr47lZbUn3QbJ405M873uYz4vJWy4sk_nOG52PWSEYTFhTYbmQf1YwZEI65wo", "https://i.pinimg.com/originals/ab/b6/a8/abb6a800ab2193fcedd9bda566b7402c.jpg")
-    var url: ArrayList<String> = arrayListOf("", "")
-    var title: ArrayList<String> = arrayListOf("Заголовок", "Заоловок")
+    var thumbnail: ArrayList<String> = arrayListOf(
+        "https://pbs.twimg.com/profile_images/793021684064419840/RjEjM6z5_400x400.jpg",
+        "https://i.pinimg.com/originals/ab/b6/a8/abb6a800ab2193fcedd9bda566b7402c.jpg"
+    )
+    var url: ArrayList<String> = arrayListOf("https://static9.depositphotos.com/1594308/1110/i/600/depositphotos_11107478-stock-photo-fantasy.jpg", "https://www.imgonline.com.ua/examples/bee-on-daisy.jpg")
+    var title: ArrayList<String> = arrayListOf("Заголовок", "Заголовок")
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -47,8 +50,10 @@ class NewsListScreenView : Fragment(), MainContract.View {
         val view = inflater.inflate(R.layout.news_list_screen, container, false)
         recyclerView = view.findViewById(R.id.news_recycler) as RecyclerView
         recyclerView.layoutManager = LinearLayoutManager(context)
-        adapter = NewsAdapter(author, timePublic, num_comments, thumbnail, url, title)          //Test
-        recyclerView.adapter = adapter                                                          //Test
+        adapter =
+            NewsAdapter(author, timePublic, num_comments, thumbnail, url, title)          //Test
+        recyclerView.adapter =
+            adapter                                                          //Test
         return view
     }
 
@@ -109,13 +114,13 @@ class NewsListScreenView : Fragment(), MainContract.View {
             url: ArrayList<String>,
             title: ArrayList<String>
         ) {
-           this.author = author
-           this.timePublic = timePublic
-           this.num_comments = num_comments
-           this.thumbnail = thumbnail
-           this.url = url
-           this.title = title
-           notifyDataSetChanged()
+            this.author = author
+            this.timePublic = timePublic
+            this.num_comments = num_comments
+            this.thumbnail = thumbnail
+            this.url = url
+            this.title = title
+            notifyDataSetChanged()
         }
     }
 
@@ -146,9 +151,9 @@ class NewsListScreenView : Fragment(), MainContract.View {
         }
 
         override fun onClick(v: View) {
-            Intent(context, ImageViewerScreen::class.java).apply {
-                putExtra(EXTRA_URL, url[position])
+            val intent = Intent(context, ImageViewerScreen::class.java)
+                intent.putExtra(EXTRA_URL, url[position])
+                startActivity(intent)
             }
         }
     }
-}
