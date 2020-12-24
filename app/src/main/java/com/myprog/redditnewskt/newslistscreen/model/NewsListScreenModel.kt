@@ -57,8 +57,9 @@ class NewsListScreenModel(presenter : MainContract.Presenter) : MainContract.Mod
             }
 
             override fun onFailure(call: Call<RedditTopNews>, t: Throwable) {
-                Log.d(TAG, "$t")
-            }
+                Log.d(TAG, "$t") // Здесь выскакивает исключение, которое не смог в одиночку победить. По данным из интернет
+            }                         // это особенность парсинга котлин объектов библиотекой jackson. Применение jackson-module-kotlin ситуацию не изменило (или я что то не так делал)
+
         })
     }
 }
